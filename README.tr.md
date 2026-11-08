@@ -7,8 +7,8 @@
 
 SitePulse üç soruya odaklanır: **Ne değişti? Neye bakmalıyım? Müşteriye hangi çalışmayı gösterebilirim?** Alan adı ve SSL yenilemelerini, sayfa kanıtlarını, kritik kaynak değişikliklerini ve bakım notlarını aynı yerde tutar. Windows sürümü yerel SQLite; Docker sürümü FastAPI ve PostgreSQL kullanır.
 
-![Türkçe gösterge paneli](docs/images/dashboard-tr.png)
-*Gerçek uygulama arayüzü; DEMO olarak işaretlenmiş örnek müşteriler ve temsili ölçümler.*
+![İngilizce gösterge paneli](docs/images/dashboard-en.png)
+*Tüm tanıtım görselleri İngilizcedir. Uygulama Türkçeyi de destekler. DEMO olarak işaretlenmiş örnek müşteriler ve temsili ölçümler gösterilir.*
 
 ## Neler sunar?
 
@@ -35,9 +35,9 @@ Yeni bir dış betik inceleme gerektiren bir gözlemdir. SitePulse kimin yükled
 
 ## Müşteriye gösterilebilir rapor
 
-![Örnek Türkçe PDF](docs/images/report-tr.png)
+![Örnek İngilizce PDF](docs/images/report-en.png)
 
-[Örnek PDF’yi açın](docs/sample-report-tr.pdf). Gözlenen bulgular ile bakım sorumlusunun girdiği çalışmalar ayrıdır. Rapor yapılmamış bir düzeltmeyi, önlenmiş bir saldırıyı veya ticari sonucu uydurmaz.
+[Örnek PDF’yi açın](docs/sample-report-en.pdf). Gözlenen bulgular ile bakım sorumlusunun girdiği çalışmalar ayrıdır. Rapor yapılmamış bir düzeltmeyi, önlenmiş bir saldırıyı veya ticari sonucu uydurmaz.
 
 ## Kurulum
 

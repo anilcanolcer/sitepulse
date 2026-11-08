@@ -2,7 +2,13 @@
 <h3 align="center">Website care, in rhythm.</h3>
 <p align="center">Turn website signals into evidence, maintenance work, and clear client reports.</p>
 <p align="center"><a href="README.tr.md">Türkçe</a> · <a href="https://github.com/anilcanolcer/sitepulse/releases/latest">Download Windows EXE</a> · <a href="#quick-start">Self-host with Docker</a></p>
-<p align="center"><a href="https://github.com/anilcanolcer/sitepulse/actions/workflows/windows.yml"><img src="https://github.com/anilcanolcer/sitepulse/actions/workflows/windows.yml/badge.svg" alt="Build and checks"></a> <img src="https://img.shields.io/badge/license-MIT-193c34" alt="MIT license"> <img src="https://img.shields.io/badge/Python-3.12-568759" alt="Python 3.12"> <img src="https://img.shields.io/badge/UI-English%20%2F%20Türkçe-b8ed98" alt="English and Turkish"></p>
+<p align="center"><a href="https://github.com/anilcanolcer/sitepulse/actions/workflows/windows.yml"><img src="https://github.com/anilcanolcer/sitepulse/actions/workflows/windows.yml/badge.svg" alt="Build and checks"></a> <img src="https://img.shields.io/badge/license-MIT-193c34" alt="MIT license"> <img src="https://img.shields.io/badge/Python-3.12-568759" alt="Python 3.12"> <img src="https://img.shields.io/badge/UI-EN%20%2F%20TR-b8ed98" alt="English and Turkish"></p>
+
+## Türkçe açıklama
+
+SitePulse; ajanslar ve serbest çalışan geliştiriciler için web sitesi bakım ve kontrol çalışma alanıdır. Alan adı/SSL bitişlerini, site erişimini, kritik kod değişikliklerini ve bakım notlarını aynı yerde takip eder. Bakım Radarı bulguları anlaşılır iş önerilerine dönüştürür; müşteri raporları PDF olarak indirilebilir.
+
+Uygulama hem İngilizce hem Türkçe kullanılabilir. Tanıtım görsellerinin tamamı tutarlılık için İngilizce hazırlanmıştır. **[Türkçe özellik açıklamaları ve kurulum rehberi →](README.tr.md)**
 
 ## A workspace for the person who maintains the website
 
@@ -39,9 +45,9 @@ The page checklist uses **11 equal-weight checks**: title, description, language
 
 ### A report that earns trust
 
-![Turkish client report preview](docs/images/report-tr.png)
+![English client report preview](docs/images/report-en.png)
 
-[Open the synthetic example PDF](docs/sample-report-tr.pdf). Reports distinguish observed findings from maintainer-entered work. They never invent a fix, a prevented hack, or a commercial result.
+[Open the synthetic example PDF](docs/sample-report-en.pdf). Reports distinguish observed findings from maintainer-entered work. They never invent a fix, a prevented hack, or a commercial result.
 
 ## Quick start
 
