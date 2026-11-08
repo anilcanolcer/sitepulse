@@ -13,7 +13,8 @@ from urllib.parse import urljoin, urlsplit, urlunsplit
 
 import requests
 from bs4 import BeautifulSoup
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
+from .insights import inspect_page
 
 USER_AGENT = "SitePulse/1.0 (desktop; local monitor)"
 BODY_LIMIT = 1_000_000
@@ -40,6 +41,7 @@ class ScanResult(BaseModel):
     structure_hash: str | None = None
     registrar: str | None = None
     error: str | None = None
+    insights: dict = Field(default_factory=dict)
 
 
 class SiteScanner:
@@ -47,11 +49,13 @@ class SiteScanner:
         url, hostname = normalize_target(raw_url)
         result = ScanResult(url=url, hostname=hostname)
         try:
-            status, millis, html = fetch_http(url)
+            status, millis, html, headers, final_url = fetch_http(url)
             result.http_status = status
             result.response_ms = millis
             if html:
                 result.structure_hash = structure_hash(html)
+                if 'html' in headers.get('Content-Type', '').lower():
+                    result.insights = inspect_page(html, headers, final_url)
         except ScanError as exc:
             result.error = exc.code
         except requests.RequestException:
@@ -112,7 +116,7 @@ def assert_public_host(host: str) -> None:
             raise ScanError("private_host")
 
 
-def fetch_http(url: str) -> tuple[int, int, str]:
+def fetch_http(url: str) -> tuple[int, int, str, dict, str]:
     session = requests.Session()
     session.headers["User-Agent"] = USER_AGENT
     current = url
@@ -153,7 +157,7 @@ def fetch_http(url: str) -> tuple[int, int, str]:
         elapsed = int((datetime.now(timezone.utc) - started).total_seconds() * 1000)
         encoding = response.encoding or "utf-8"
         html = b"".join(chunks).decode(encoding, errors="replace")
-        return response.status_code, max(elapsed, 0), html
+        return response.status_code, max(elapsed, 0), html, dict(response.headers), current
     finally:
         if response is not None:
             response.close()

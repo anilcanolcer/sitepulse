@@ -6,14 +6,34 @@ on:
 permissions:
   contents: write
 jobs:
+  container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check WordPress receiver
+        run: |
+          php -l integrations/wordpress/sitepulse-shield.php
+          php tests/receiver.php
+      - name: Start Docker stack
+        run: docker compose up --build -d --wait
+      - name: Check served UI, assets, and database-backed API
+        run: |
+          curl --retry 20 --retry-connrefused --retry-delay 2 --fail http://127.0.0.1:8000/api/dashboard -o /tmp/dashboard.json
+          python -c "import json; d=json.load(open('/tmp/dashboard.json')); assert d['total_sites']==0; assert d['sites']==[]"
+          curl --fail http://127.0.0.1:8000/ -o /tmp/index.html
+          curl --fail http://127.0.0.1:8000/assets/sitepulse-mark.svg -o /tmp/logo.svg
+      - name: Stop containers
+        if: always()
+        run: docker compose down -v
   build:
+    needs: container
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: python -m pip install -r requirements-desktop.txt
+      - run: python -m pip install -r requirements-desktop.txt -r requirements-test.txt
       - run: python -m compileall -q app desktop.py
       - run: python -m unittest discover -s tests -v
       - run: python -m PyInstaller --noconfirm --clean sitepulse.spec

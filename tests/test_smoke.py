@@ -1,22 +1,15 @@
 """Exercise persistence and API logic without external network services."""
-import os
-import tempfile
+import _database
 import unittest
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
-temporary = tempfile.TemporaryDirectory()
-os.environ['DATABASE_URL'] = 'sqlite:///' + (Path(temporary.name) / 'test.db').as_posix()
 from app.database import Base, SessionLocal, engine
 from app import main
 from app.models import Site, MaintenanceLog
 from app.scanner import structure_hash
-
-def tearDownModule():
-    engine.dispose()
-    temporary.cleanup()
 
 class SitePulseTest(unittest.TestCase):
     def setUp(self):
