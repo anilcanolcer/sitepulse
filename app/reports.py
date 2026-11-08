@@ -42,9 +42,14 @@ def create_report(site, logs, language='tr') -> bytes:
         story.extend([p(t['tasks'].get(task['code'],task['code'])),p(t['evidence']+': '+task['evidence'])])
     if not insight.get('tasks'):story.append(p(t['clear'] if insight else t['unknown']))
     story.append(p(t['notes'],'PulseHeading'))
-    for log in logs:
+    recorded=[l for l in logs if l.get('kind')!='task' or l.get('status')=='done']
+    pending=[l for l in logs if l.get('kind')=='task' and l.get('status')!='done']
+    for log in recorded:
         story.extend([p(date(log['created_at']),'PulseHeading'),p(log['body'])])
-    if not logs:story.append(p(t['none']))
+    if not recorded:story.append(p(t['none']))
+    if pending:
+        story.append(p('Açık bakım işleri' if language=='tr' else 'Open maintenance tasks','PulseHeading'))
+        for log in pending:story.append(p(log['body']))
     def footer(canvas,doc):
         canvas.setFont('Pulse',8);canvas.setFillColor(colors.HexColor('#568759'));canvas.drawString(45,28,'SitePulse | '+datetime.now(timezone.utc).strftime('%Y-%m-%d UTC'));canvas.drawRightString(550,28,str(doc.page))
     doc.build(story,onFirstPage=footer,onLaterPages=footer)

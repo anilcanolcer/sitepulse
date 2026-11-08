@@ -12,6 +12,7 @@ test_data = tempfile.TemporaryDirectory() if '--self-test' in sys.argv else None
 data_dir = Path(test_data.name) if test_data else Path(os.environ.get('LOCALAPPDATA', Path.home())) / 'SitePulse'
 data_dir.mkdir(parents=True, exist_ok=True)
 os.environ['DATABASE_URL'] = 'sqlite:///' + (data_dir / 'sitepulse.db').as_posix()
+os.environ['SITEPULSE_DESKTOP'] = '1'
 
 try:
     import uvicorn

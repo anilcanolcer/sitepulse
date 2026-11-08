@@ -19,11 +19,18 @@ HTTP checks are the beginning. SitePulse connects renewal dates, page evidence, 
 ![English dashboard](docs/images/dashboard-en.png)
 *Actual application UI with clearly marked, synthetic DEMO clients. Screenshot dates and metrics are illustrative.*
 
+## Light or dark. Your workspace, your choice.
+
+Use the sun/moon button in the navbar. The saved theme applies to cards, renewal countdowns, forms, notifications and code diffs on the next launch.
+
+![Dark dashboard](docs/images/dashboard-dark-en.png)
+
 ## From signal to action
 
 | Feature | What you get |
 | --- | --- |
-| 🌐 Client-site overview | HTTP status, response time, domain expiry, verified TLS certificate expiry, registrar, and maintenance history. |
+| 🌐 Client-site overview | HTTP status, response time, domain/SSL/hosting renewal countdowns, monthly care fee, and an at-a-glance page health score. |
+| 📋 Client activity | Turn a radar finding into an open maintenance task with one click. Complete or reopen it; reports separate unfinished tasks from recorded work. |
 | 🔍 Critical-code timeline | Red/green additions and removals of external scripts, stylesheets, iframe sources and form destinations. Last 30 snapshots; query values and inline contents excluded. |
 | 🧭 Maintenance radar | Platform fingerprints with evidence, browser protection headers, insecure resources, form destinations, search metadata and basic image/language checks. |
 | 🧩 Change receipt | New or removed external service hosts, disappeared headers and changed page titles between successful analyses. |
@@ -83,7 +90,7 @@ Changing the PostgreSQL environment password does not change credentials inside 
 
 ## Daily checks and scope
 
-While the app/API is running, a scheduler checks for sites whose last check is more than 24 hours old, in batches of ten each minute. Desktop monitoring stops when you close the app. Run one API worker; multi-worker coordination is not implemented. Manual scans run immediately.
+While the app/API is running, HTTP/TLS availability checks become due every five minutes; deep WHOIS/page-evidence checks become due every 24 hours. Each queue processes up to ten sites per scheduler cycle (once a minute), so large queues or slow remote sites can delay checks. Desktop monitoring stops when you close the app. Run one API worker; multi-worker coordination is not implemented. Manual scans run immediately.
 
 WHOIS data is registry-dependent and may be missing. TLS expiry requires a verifiable certificate. Page inspection does not execute JavaScript; dynamically rendered content may be absent. HTTP timing includes redirects and up to the first 1 MB of content. Structural MD5 is a bounded change hint, not a cryptographic security check. The linked-page scanner does not probe guessed backup files or submit forms. Plugin versions are **not matched to a vulnerability feed** and must not be interpreted as confirmed vulnerabilities.
 
@@ -112,6 +119,12 @@ The test suite covers persistence/cascade deletion, critical-resource diffs, que
 ## Deployment boundaries
 
 This release is a trusted-local workspace, without login, account separation or user authorization. Add those controls before exposing it to untrusted users or turning it into a multi-tenant SaaS. Public-address validation is present, but DNS can change between validation and connection; isolate scan egress from internal services. Alerts are in-app, not OS push notifications. The AI payload helper is optional and does not send a request by itself.
+
+## Created by
+
+Developed by **Anılcan Ölçer** · [GitHub](https://github.com/anilcanolcer) · [Ölçer Web Tasarım](https://olcerwebtasarim.com/). These links are also available inside the desktop app.
+
+Hosting dates are entered from your provider or contract; WHOIS cannot infer them. Monthly care fees support TRY, USD and EUR. Only in-app notifications are enabled; no email/SMS/WhatsApp service is configured.
 
 ## Contribute
 

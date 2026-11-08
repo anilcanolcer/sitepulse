@@ -22,6 +22,7 @@ class FeatureTests(unittest.TestCase):
         self.assertIn('password_form',[x['code'] for x in data['tasks']])
         self.assertIn('mixed',[x['code'] for x in data['tasks']])
         self.assertEqual(data['plugins'],['sample'])
+        self.assertEqual(data['links']['internal'],1)
         self.assertNotIn('token',str(data['critical']))
         self.assertEqual(data['checks_total'],11)
         malformed=inspect_page('<script src="http://["></script><script src="data:text/javascript,secret"></script>',{},'https://example.com/')
@@ -42,6 +43,21 @@ class FeatureTests(unittest.TestCase):
             for _ in range(35):main.save_snapshot(db,site)
             db.commit()
             self.assertEqual(db.query(ScanSnapshot).filter_by(site_id=site.id).count(),30)
+
+    def test_five_minute_probe_preserves_deep_analysis(self):
+        from datetime import timedelta
+        with SessionLocal() as db:
+            site=Site(client_name='Probe',url='https://example.com/',hostname='example.com',insights={'score':90},availability_checked_at=datetime.now(timezone.utc)-timedelta(minutes=6))
+            db.add(site);db.commit()
+            original=site.checked_at
+        result=ScanResult(url='https://example.com/',hostname='example.com',http_status=503,response_ms=80)
+        with patch.object(main.scanner,'check_availability',return_value=result):
+            main.check_availability_due()
+        with SessionLocal() as db:
+            site=db.query(Site).one()
+            self.assertEqual(site.insights,{'score':90})
+            self.assertEqual(site.checked_at.replace(tzinfo=timezone.utc),original.replace(tzinfo=timezone.utc))
+            self.assertEqual(site.http_status,503)
 
     def test_snapshots_diff_and_cascade(self):
         with SessionLocal() as db:

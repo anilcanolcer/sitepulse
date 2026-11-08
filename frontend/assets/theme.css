@@ -1,0 +1,32 @@
+:root { color-scheme: light; }
+html.dark { color-scheme: dark; background: #0b1412; }
+html.dark body { background: #0b1412 !important; color: #e8f0eb !important; }
+html.dark .bg-white { background-color: #14231f; }
+html.dark .bg-slate-50 { background-color: #10201b; }
+html.dark [class*="bg-[#f4f7f1]"] { background-color: #10251d; }
+html.dark .border-slate-100, html.dark .border-slate-200,
+html.dark .border-slate-300 { border-color: #30433b; }
+html.dark .border-emerald-100 { border-color: #284a39; }
+html.dark .text-slate-900, html.dark .text-slate-700 { color: #e8f0eb; }
+html.dark .text-slate-600 { color: #c0d0c7; }
+html.dark .text-slate-500, html.dark .text-slate-400 { color: #a1b6aa; }
+html.dark .text-indigo-600, html.dark .text-indigo-700 { color: #b8ed98 !important; }
+html.dark .bg-indigo-50, html.dark .bg-indigo-100 { background-color: #233d2b !important; }
+html.dark .bg-emerald-50 { background-color: #153e2e; }
+html.dark .text-emerald-700, html.dark .text-emerald-800 { color: #a6e8c2; }
+html.dark .bg-rose-50 { background-color: #40222a; }
+html.dark .border-rose-200 { border-color: #7b3d4c; }
+html.dark .text-rose-600, html.dark .text-rose-700, html.dark .text-rose-800 { color: #ffb3bd; }
+html.dark .bg-amber-50 { background-color: #3d321b; }
+html.dark .border-amber-200 { border-color: #766035; }
+html.dark .text-amber-600, html.dark .text-amber-700 { color: #f3d18c; }
+html.dark .hover\:bg-slate-50:hover { background-color: #21392f; }
+html.dark input, html.dark textarea, html.dark select { background-color: #0e1c17; color: #e8f0eb; }
+html.dark input::placeholder, html.dark textarea::placeholder { color: #89a293; }
+html.dark .card-shadow { box-shadow: 0 8px 30px #0003; }
+html.dark .modal-bg { background: #000a; }
+html.dark .renewal-card { background: #14231f; }
+button:focus-visible, a:focus-visible, summary:focus-visible { outline: 2px solid #568759; outline-offset: 4px; }
+html.dark button:focus-visible, html.dark a:focus-visible, html.dark summary:focus-visible { outline-color: #b8ed98; }
+.theme-toggle { transition: background-color .15s ease, color .15s ease; }
+@media (prefers-reduced-motion: reduce) { .theme-toggle { transition: none; } }

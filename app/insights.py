@@ -19,6 +19,12 @@ def inspect_page(html: str, headers: dict, url: str) -> dict:
     robots = soup.find('meta', attrs={'name': 'robots'})
     canonical = soup.find('link', rel='canonical')
     dependencies = {}
+    links={}
+    for anchor in soup.find_all('a',href=True):
+        target=safe_parts(url,anchor['href'])
+        if target is None:continue
+        address=f'{target.scheme}://{target.hostname}{target.path or "/"}'
+        links[address]={'url':address,'external':target.hostname!=urlsplit(url).hostname}
     mixed = []
     for tag, attr in [('script','src'),('link','href'),('iframe','src')]:
         for item in soup.find_all(tag):
@@ -78,4 +84,4 @@ def inspect_page(html: str, headers: dict, url: str) -> dict:
     if any(f['external'] for f in forms): add('form_destination','review',', '.join(sorted({f['host'] or '' for f in forms if f['external']})))
     # Transparent checklist score, not a vulnerability or business-risk probability.
     checks = [bool(title),bool(seo['description']),bool(seo['language']),not seo['missing_alt'],not mixed,not any(not f['https'] and f['password'] for f in forms),*security.values()]
-    return {'page_url':url,'technology':tech[:10], 'dependencies':[{'host':host,'types':sorted(types)} for host,types in sorted(dependencies.items())][:60], 'forms':forms, 'security':security, 'seo':seo, 'tasks':tasks, 'mixed_content':mixed[:10], 'critical':sorted(set(critical))[:300], 'plugins':plugins, 'score':round(100*sum(checks)/len(checks)), 'checks_passed':sum(checks), 'checks_total':len(checks)}
+    return {'page_url':url,'technology':tech[:10], 'dependencies':[{'host':host,'types':sorted(types)} for host,types in sorted(dependencies.items())][:60], 'links':{'total':len(links),'external':sum(link['external'] for link in links.values()),'internal':sum(not link['external'] for link in links.values()),'items':list(links.values())[:40]},'forms':forms, 'security':security, 'seo':seo, 'tasks':tasks, 'mixed_content':mixed[:10], 'critical':sorted(set(critical))[:300], 'plugins':plugins, 'score':round(100*sum(checks)/len(checks)), 'checks_passed':sum(checks), 'checks_total':len(checks)}

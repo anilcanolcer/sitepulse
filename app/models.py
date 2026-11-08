@@ -1,10 +1,17 @@
 from datetime import datetime, timezone
-from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, Text, JSON
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, Text, JSON, Numeric
+from decimal import Decimal
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from .database import Base
 
 def utcnow():
     return datetime.now(timezone.utc)
+
+class AppPreference(Base):
+    __tablename__ = 'app_preferences'
+    id: Mapped[int] = mapped_column(primary_key=True)
+    theme: Mapped[str] = mapped_column(String(10),nullable=False)
+    language: Mapped[str] = mapped_column(String(2),nullable=False)
 
 class Site(Base):
     __tablename__ = "sites"
@@ -26,6 +33,10 @@ class Site(Base):
     shield_state: Mapped[str | None] = mapped_column(String(20))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, nullable=False)
     checked_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, nullable=False)
+    availability_checked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    hosting_expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    monthly_fee: Mapped[Decimal] = mapped_column(Numeric(12,2), default=0, server_default='0', nullable=False)
+    currency: Mapped[str] = mapped_column(String(3), default='TRY', server_default='TRY', nullable=False)
     logs: Mapped[list['MaintenanceLog']] = relationship(back_populates='site', cascade='all, delete-orphan', passive_deletes=True, order_by='MaintenanceLog.created_at, MaintenanceLog.id')
 
 class ScanSnapshot(Base):
@@ -40,5 +51,8 @@ class MaintenanceLog(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     site_id: Mapped[int] = mapped_column(ForeignKey('sites.id', ondelete='CASCADE'), index=True, nullable=False)
     body: Mapped[str] = mapped_column(Text, nullable=False)
+    kind: Mapped[str] = mapped_column(String(20), default='note', server_default='note', nullable=False)
+    status: Mapped[str] = mapped_column(String(20), default='recorded', server_default='recorded', nullable=False)
+    completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, nullable=False)
     site: Mapped[Site] = relationship(back_populates='logs')

@@ -45,6 +45,17 @@ class ScanResult(BaseModel):
 
 
 class SiteScanner:
+    def check_availability(self, raw_url: str) -> ScanResult:
+        url, hostname=normalize_target(raw_url)
+        result=ScanResult(url=url,hostname=hostname)
+        try:
+            result.http_status,result.response_ms,_,_,_=fetch_http(url)
+        except (ScanError, requests.RequestException, OSError):
+            result.error='request_failed'
+        try: result.ssl_expires_at=ssl_expiry(hostname)
+        except (OSError,ssl.SSLError,ScanError): pass
+        return result
+
     def scan(self, raw_url: str) -> ScanResult:
         url, hostname = normalize_target(raw_url)
         result = ScanResult(url=url, hostname=hostname)

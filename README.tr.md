@@ -10,11 +10,18 @@ SitePulse üç soruya odaklanır: **Ne değişti? Neye bakmalıyım? Müşteriye
 ![İngilizce gösterge paneli](docs/images/dashboard-en.png)
 *Tüm tanıtım görselleri İngilizcedir. Uygulama Türkçeyi de destekler. DEMO olarak işaretlenmiş örnek müşteriler ve temsili ölçümler gösterilir.*
 
+## Açık ve koyu tema
+
+Üst menüdeki güneş/ay düğmesiyle temayı değiştirin. Tercihiniz yeniden açılışta hatırlanır; kartlar, geri sayımlar, formlar, bildirimler ve kod farkları aynı temayı kullanır.
+
+![İngilizce koyu tema](docs/images/dashboard-dark-en.png)
+
 ## Neler sunar?
 
 | Özellik | Sağladığı bilgi |
 | --- | --- |
-| 🌐 Site özeti | HTTP durumu, yanıt süresi, alan adı/SSL bitişi, kayıt kuruluşu ve bakım geçmişi. |
+| 🌐 Site özeti | HTTP durumu, yanıt süresi, alan adı/SSL/hosting geri sayımları, aylık bakım ücreti ve kart üzerinde sağlık puanı. |
+| 📋 Müşteri hareketleri | Bulguyu tek tıkla açık bakım işine dönüştürün; tamamlayın veya yeniden açın. Raporlar açık işleri kaydedilmiş çalışmalardan ayırır. |
 | 🔍 Kritik kod zaman tüneli | Betik, stil, iframe ve form hedeflerinin eklenen/kaldırılan satırları. Son 30 kayıt; sorgu değerleri ve satır içi içerik saklanmaz. |
 | 🧭 Bakım Radarı | Altyapı izleri, güvenlik başlıkları, güvensiz kaynaklar, form hedefleri, SEO ve temel erişilebilirlik kontrolleri. |
 | 🧩 Değişim fişi | Yeni/kaldırılmış servis sunucuları, kaybolan güvenlik başlıkları ve değişen sayfa başlığı. |
@@ -65,7 +72,7 @@ Arayüz Tailwind/Alpine/yazı tipi CDN’leri için internet ister. Kontroller D
 
 ## Günlük kontrol ve kapsam
 
-Uygulama/API açıkken her dakika, son kontrolü 24 saati geçmiş en fazla 10 site taranır. Masaüstü uygulaması kapanınca izleme durur. Tek API worker kullanın; çoklu worker koordinasyonu yoktur. Elle tarama hemen başlar.
+Uygulama/API açıkken HTTP/TLS erişim kontrolü beş dakikada bir, WHOIS ve kapsamlı sayfa analizi 24 saatte bir vadesi gelen kontroller olarak kuyruğa girer. Her kuyruk, dakikalık döngüde en fazla 10 site işler; yoğun kuyruk ve yavaş uzak siteler süreyi uzatabilir. Masaüstü uygulaması kapanınca izleme durur. Tek API worker kullanın; çoklu worker koordinasyonu yoktur. Elle tarama hemen başlar.
 
 WHOIS bilgisi kayıt kuruluşuna göre eksik olabilir. SSL tarihi doğrulanabilen sertifikadan alınır. JavaScript çalıştırılmaz; dinamik içerik görünmeyebilir. Yanıt süresi yönlendirmeleri ve en fazla ilk 1 MB içeriği kapsar. MD5 yapı izi sınırlı bir değişim ipucudur. Tarayıcı tahmini yedek dosya isimlerini denemez, form göndermez. Eklenti sürümleri bir güvenlik açığı veritabanıyla eşleştirilmez; kesin açık tespiti olarak yorumlanamaz.
 
@@ -90,6 +97,12 @@ python -m PyInstaller --noconfirm --clean sitepulse.spec
 EXE `dist/` içine çıkar. GitHub Actions Linux’ta PHP alıcısını ve PostgreSQL/API Docker açılışını, Windows’ta Python testlerini, EXE derlemesini ve paketli başlangıç kontrolünü çalıştırır. Sürüm etiketleri EXE’yi Releases’e yayımlar. Başlangıç testi, Windows/WebView üzerinde elle kullanma testinin yerine geçmez.
 
 Bu sürüm giriş sistemi veya hesap ayrımı olmayan güvenilir yerel çalışma alanıdır. Çok kullanıcılı SaaS’a veya güvenilmeyen ağa açmadan bu kontroller eklenmelidir. DNS doğrulama ile bağlantı arasında değişebilir; tarayıcı çıkış ağını iç servislerden ayırın. Bildirimler işletim sistemi push bildirimi değil uygulama içidir.
+
+## Geliştirici
+
+**Anılcan Ölçer** · [GitHub](https://github.com/anilcanolcer) · [Ölçer Web Tasarım](https://olcerwebtasarim.com/). Bu bağlantılar masaüstü uygulamasında da bulunur.
+
+Hosting tarihi sağlayıcınızdan veya sözleşmenizden elle girilir; WHOIS ile belirlenemez. Aylık bakım ücreti TRY, USD ve EUR destekler. Yalnızca uygulama içi bildirimler etkindir; e-posta/SMS/WhatsApp servisi yapılandırılmamıştır.
 
 ## Katkı
 
