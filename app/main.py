@@ -198,7 +198,10 @@ class ShieldAction(BaseModel):
 @app.post('/api/sites/{site_id}/shield/config')
 def pair_shield(site_id:int, payload:ShieldPairing, db:Session=Depends(get_db)):
     site=get_site(db,site_id)
-    url, host=normalize_target(payload.url)
+    try:
+        url, host=normalize_target(payload.url)
+    except (ScanError, ValueError) as exc:
+        raise HTTPException(422,'Enter a reachable public HTTPS receiver URL') from exc
     if not url.startswith('https://') or host != site.hostname:
         raise HTTPException(422,'Receiver must use HTTPS on the monitored hostname')
     site.shield_url=url
@@ -212,8 +215,8 @@ def shield(site_id:int, payload:ShieldAction, db:Session=Depends(get_db)):
     site=get_site(db,site_id)
     if payload.action not in ('suspend','resume') or not site.shield_url or not site.shield_secret:
         raise HTTPException(422,'Configure a receiver and choose suspend or resume')
-    normalize_target(site.shield_url)
     try:
+        normalize_target(site.shield_url)
         dispatch_payment_shield_webhook(site.shield_url,site.id,payload.action,'0','N/A',site.shield_secret)
     except Exception as exc:
         raise HTTPException(502,'Receiver did not confirm the change') from exc
@@ -228,8 +231,8 @@ def plugin_inventory(site_id:int, db:Session=Depends(get_db)):
     site=get_site(db,site_id)
     if not site.shield_url or not site.shield_secret:
         raise HTTPException(422,'Pair an owner-installed WordPress receiver first')
-    normalize_target(site.shield_url)
     try:
+        normalize_target(site.shield_url)
         data=dispatch_payment_shield_webhook(site.shield_url,site.id,'inventory','0','N/A',site.shield_secret)
         return {'plugins':data.get('plugins',[]),'updates_checked_at':data.get('updates_checked_at')}
     except Exception as exc:

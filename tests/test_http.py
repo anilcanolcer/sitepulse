@@ -30,6 +30,7 @@ class HttpTests(unittest.TestCase):
             self.assertEqual(len(client.get(f'/api/sites/{sid}/timeline').json()),1)
             self.assertTrue(client.get(f'/api/sites/{sid}/report.pdf?lang=tr').content.startswith(b'%PDF'))
             self.assertEqual(client.post(f'/api/sites/{sid}/shield',json={'action':'suspend'}).status_code,422)
+            self.assertEqual(client.post(f'/api/sites/{sid}/shield/config',json={'url':'https://localhost/hook','secret':'s'*32}).status_code,422)
             with patch.object(main,'normalize_target',return_value=('https://example.com/wp-json/sitepulse/v1/shield','example.com')):
                 self.assertEqual(client.post(f'/api/sites/{sid}/shield/config',json={'url':'https://example.com/wp-json/sitepulse/v1/shield','secret':'s'*32}).status_code,200)
             self.assertNotIn('s'*32,client.get(f'/api/sites/{sid}').text)
